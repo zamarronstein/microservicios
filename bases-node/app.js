@@ -10,7 +10,7 @@ switch (comando) {
         break;
     case 'create':
         createFile(args.base, args.limit).then((file) => {
-            console.log(`Archivo creado ${file}`);
+            console.log(`Archivo creado `.grey + `${file}`.green);
         }).catch((err) => {
             console.log(err);
         });

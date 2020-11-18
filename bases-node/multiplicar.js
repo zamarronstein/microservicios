@@ -1,14 +1,15 @@
 const fs = require('fs');
+const colors = require('colors');
 
 let printTable = (base, limit) => {
-
-    let content = '';
-
+    colors.enable();
+    console.log('*******************************************************'.green);
+    console.log(`Tabla de multiplicar del ${base} al ${limit}`.green);
+    console.log('*******************************************************'.green);
     for (let i = 1; i <= limit; i++) {
-        content += `${base} * ${i} = ${base * i}\n`;
+        console.log(`${base} * ${i} = ${base * i}`.yellow);;
     }
-
-    console.log(content);
+    colors.disable();
 };
 
 let createFile = (base, limit) => {
@@ -16,7 +17,7 @@ let createFile = (base, limit) => {
     return new Promise((resolve, reject) => {
 
         if (!Number(base)) {
-            reject(`El valor introducido de base (${base}) no es un número!`);
+            reject(`El valor introducido de base (${base}) no es un número!`.red);
             return;
         }
 
@@ -29,7 +30,7 @@ let createFile = (base, limit) => {
         fs.writeFile(`tablas/tabla-${base}.txt`, content, (err) => {
 
             if (err) {
-                reject(`Ha habido un error al procesar la tabla del ${base}, ${err}`);
+                reject(`Ha habido un error al procesar la tabla del ${base}, ${err}`.red);
             }
 
             resolve(`tabla-${base}.txt`);
