@@ -1,23 +1,6 @@
 const { createFile, printTable } = require('./multiplicar');
-const args = require('yargs').command('list', 'Print a multiply table', {
-    limit: {
-        alias: 'l',
-        default: 10
-    },
-    base: {
-        alias: 'b',
-        demandOption: true
-    }
-}).command('create', 'Creates a file with a multiply table', {
-    limit: {
-        alias: 'l',
-        default: 10
-    },
-    base: {
-        alias: 'b',
-        demandOption: true
-    }
-}).help().argv;
+
+const args = require('./config/yargs').args;
 
 let comando = args._[0];
 
@@ -35,9 +18,3 @@ switch (comando) {
     default:
         console.log('Command not found!');
 }
-
-//console.log(args._[0]);
-
-/**
-
-**/
