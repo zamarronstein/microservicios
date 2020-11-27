@@ -21,8 +21,13 @@ process.env.EXPIRATION = 60 * 60 * 24 * 30; // 60 segs * 60 min * 24 hrs * 30 da
 let urlDB;
 
 if (process.env.NODE_ENV === 'develop') {
-    urlDB = 'mongodb://172.18.0.3:27017/cafe';
+    urlDB = 'mongodb://172.18.0.2:27017/cafe';
 } else {
     urlDB = process.env.MONGO_URI;
 }
 process.env.URLDB = urlDB;
+
+// ============================
+//  Google Sing-In Config
+// ============================
+process.env.CLIENT_ID = process.env.CLIENT_ID || '905942847697-uohc0ureqr3lvf9aqh0vjvm3snks7rao.apps.googleusercontent.com';

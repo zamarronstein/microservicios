@@ -2,6 +2,8 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Usuario = require('../models/usuario');
+const {OAuth2Client, UserRefreshClient} = require('google-auth-library');
+const client = new OAuth2Client(process.env.CLIENT_ID);
 const app = express();
 
 app.post('/login',(req, res) => {
@@ -48,5 +50,87 @@ app.post('/login',(req, res) => {
         });
     });
 });
+
+async function verify(token) {
+
+    const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: process.env.CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
+    });
+
+    const payload = ticket.getPayload();
+
+    return {
+        nombre: payload.name,
+        email: payload.email,
+        img: payload.picture,
+        google: true
+    };
+}
+
+app.post('/google', async (req, res) => {
+
+    let token = req.body.idtoken;
+
+    let googleUser = await verify(token).catch(err => {
+        return res.status(400).json({
+            ok: false,
+            err
+        });
+    });
+
+    userDB = await Usuario.findOne({email: googleUser.email}); //busca el email del usuario en la bd
+
+    if(userDB) {
+
+        if (userDB.google === false) {
+            return res.status(403).json({
+                ok: false,
+                err
+            });
+        }
+
+        let token = jwt.sign({
+            usuario: userDB
+        }, process.env.SEED, {expiresIn: process.env.EXPIRATION});
+
+        return res.json({
+            ok: true, 
+            usuario: userDB,
+            token
+        });
+
+    } else {
+
+        let usuario = new Usuario({
+            nombre: googleUser.nombre,
+            email: googleUser.email,
+            img: googleUser.img,
+            google: true,
+            password: ':('
+        });
+
+        usuario.save((err, usuarioDB) => {
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            let token = jwt.sign({
+                usuario: usuarioDB
+            }, process.env.SEED, {expiresIn: process.env.EXPIRATION});
+
+            return res.json({
+                ok: true, 
+                usuario: userDB,
+                token
+            });
+        });
+    }
+});
+
 
 module.exports = app;

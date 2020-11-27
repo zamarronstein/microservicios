@@ -1,18 +1,11 @@
 const express = require('express');
-
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
-
 const Usuario = require('../models/usuario');
-
 const {verificaToken, verificaRole} = require('../middlewares/auth');
-
 const app = express();
 
-
 app.get('/usuario', verificaToken, function(req, res) {
-
-
 
     let desde = req.query.desde || 0;
     desde = Number(desde);
@@ -141,7 +134,5 @@ app.delete('/usuario/:id', [verificaToken, verificaRole], function(req, res) {
 
     });
 });
-
-
 
 module.exports = app;

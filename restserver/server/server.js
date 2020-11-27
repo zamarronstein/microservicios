@@ -4,6 +4,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
+const path = require('path');
+
+//add path of public folder
+app.use(express.static(path.resolve(__dirname, '../public/')));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
