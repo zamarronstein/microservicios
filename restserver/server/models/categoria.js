@@ -1,4 +1,3 @@
-const { ObjectId } = require('mongoose');
 const mongoose = require('mongoose');
 
 let Schema = mongoose.Schema;
@@ -10,7 +9,8 @@ let categoriaSchema = new Schema({
         required: [true, 'El nombre de la categoría es necesario!']
     },
     usuario: {
-        type: ObjectId,
+        type: Schema.Types.ObjectId,
+        ref: 'Usuario',
         required: [true, 'El usuario es necesario!']
     }
 });
