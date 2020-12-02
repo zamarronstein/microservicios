@@ -105,3 +105,8 @@ dist
 
 # Idea Local files
 .idea/
+
+# Uploaded files
+uploads/
+
+tmp/

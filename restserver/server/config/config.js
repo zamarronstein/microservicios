@@ -31,3 +31,9 @@ process.env.URLDB = urlDB;
 //  Google Sing-In Config
 // ============================
 process.env.CLIENT_ID = process.env.CLIENT_ID || '905942847697-uohc0ureqr3lvf9aqh0vjvm3snks7rao.apps.googleusercontent.com';
+
+// ============================
+//  File Configuration
+// ============================
+process.env.VALID_EXTENSIONS = "jpg,png,jpeg,gif";
+process.env.VALID_TYPES = "user,product";
