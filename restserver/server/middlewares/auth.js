@@ -39,4 +39,24 @@ let verificaRole = (req, res, next) => {
     next();
 };
 
-module.exports = { verificaToken, verificaRole };
+
+let verificaTokenPorURL = (req, res, next) => {
+
+    let token =  req.query.token;
+
+    jwt.verify(token, process.env.SEED, (err, decoded) => {
+
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+
+        req.usuario = decoded.usuario;
+
+        next();
+    });
+};
+
+module.exports = { verificaToken, verificaRole, verificaTokenPorURL };
