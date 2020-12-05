@@ -1,5 +1,10 @@
 const { io } = require('../server');
 
+const { TicketControl } = require('../classes/ticket-control');
+
+let ticket_control = new TicketControl();
+
+console.log(ticket_control);
 
 io.on('connection', (client) => {
 
@@ -14,6 +19,28 @@ io.on('connection', (client) => {
 
     client.on('disconnect', () => {
         console.log('Usuario desconectado');
+    });
+
+
+    client.on('next', (data, callback) => {
+
+        console.log("*** next!");
+        try {
+
+            ticket_control.next();
+        } catch (exception) {
+
+            callback({
+                ok: false,
+                msg: exception
+            });
+        }
+
+        callback({
+            ok: true,
+            msg: 'Ticket generated!'
+        });
+
     });
 
     // Escuchar el cliente
