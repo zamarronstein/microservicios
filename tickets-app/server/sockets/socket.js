@@ -4,8 +4,6 @@ const { TicketControl } = require('../classes/ticket-control');
 
 let ticket_control = new TicketControl();
 
-console.log(ticket_control);
-
 io.on('connection', (client) => {
 
     console.log('Usuario conectado');
@@ -15,8 +13,6 @@ io.on('connection', (client) => {
         mensaje: 'Bienvenido a esta aplicación'
     });
 
-
-
     client.on('disconnect', () => {
         console.log('Usuario desconectado');
     });
@@ -24,7 +20,6 @@ io.on('connection', (client) => {
 
     client.on('next', (data, callback) => {
 
-        console.log("*** next!");
         try {
 
             ticket_control.next();
@@ -38,32 +33,19 @@ io.on('connection', (client) => {
 
         callback({
             ok: true,
-            msg: 'Ticket generated!'
+            msg: 'Ticket generated!',
+            ticket: ticket_control.getLastTicket()
         });
 
     });
 
-    // Escuchar el cliente
-    client.on('enviarMensaje', (data, callback) => {
-
-        console.log(data);
-
-        client.broadcast.emit('enviarMensaje', data);
+    client.on('attend', (desk, callback) => {
 
 
-        // if (mensaje.usuario) {
-        //     callback({
-        //         resp: 'TODO SALIO BIEN!'
-        //     });
+        let attended = ticket_control.attend(desk);
 
-        // } else {
-        //     callback({
-        //         resp: 'TODO SALIO MAL!!!!!!!!'
-        //     });
-        // }
-
-
-
+        callback(attended);
+        client.broadcast.emit('update', attended);
     });
 
 });

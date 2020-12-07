@@ -1,6 +1,7 @@
 var socket = io();
 
-let btnNewTicket = $("#btnGenerateTicket");
+let btnNewTicket = $("#btnGenerateTicket"),
+    lblCurrentTicket = $("#lblCurrentTicket");
 
 socket.on('connect', function() {
 
@@ -11,6 +12,8 @@ btnNewTicket.on('click', function() {
 
     socket.emit('next', null, function(response) {
 
-        console.log(response);
+        if (response.ok) {
+            lblCurrentTicket.html(response.ticket);
+        }
     });
 });

@@ -12,13 +12,15 @@
 
 <body class="container">
     <h1>Escritorio</h1>
-    <h4>Atendiendo a <small>....</small></h4>
+    <h4>Atendiendo a <small><span id="spanAttended"></span></small></h4>
 
-    <button class="btn btn-primary">
+    <button id="btnAttend" class="btn btn-primary">
         Atender siguiente ticket
     </button>
 
-
+    <script src="socket.io/socket.io.js"></script>
+    <script src="js/libs/jquery.min.js"></script>
+    <script src="js/desktop.js"></script>
 </body>
 
 </html>
