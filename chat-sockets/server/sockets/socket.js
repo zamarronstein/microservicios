@@ -1,30 +1,31 @@
 const { io } = require('../server');
-const {Users} = require('../../classes/users');
+const { Users } = require('../../classes/users');
 let users = new Users();
-const {message} = require('../utils/message');
+const { message } = require('../utils/message');
 
 
 io.on('connection', (client) => {
 
     client.on('enter', (user, callback) => {
 
-        if (!user.name) {
+        if (!user.name || !user.room) {
             return callback({
                 ok: false,
-                msg: 'Name of the user is required!'
+                msg: 'Name and room are required!'
             });
         }
 
         let connectedUsers = users.addPerson({
             id: client.id,
-            name: user.name
+            name: user.name,
+            room: user.room
         });
 
-        client.broadcast.emit('updateUsersList', users.getPeople());
+        client.broadcast.to(user.room).emit('updateUsersList', users.getPeople());
 
         return callback({
             ok: true,
-            connectedUsers
+            connectedUsers: users.getPeoplePerRoom(user.room);
         });
     });
 
@@ -32,14 +33,14 @@ io.on('connection', (client) => {
 
         let person = users.getPerson(client.id);
 
-        client.broadcast.emit('messages', message(person.name, _message));
+        client.broadcast.to(person.room).emit('messages', message(person.name, _message));
     });
 
     client.on('disconnect', () => {
 
         let deletedUser = users.deletePerson(client.id);
 
-        client.broadcast.emit('updateUsersList', users.getPeople());
-        client.broadcast.emit('messages', message('System', `${deletedUser.name} is out!`));
+        client.broadcast.to(deletedUser.room).emit('updateUsersList', users.getPeople());
+        client.broadcast.to(deletedUser.room).emit('messages', message('System', `${deletedUser.name} is out!`));
     });
 });

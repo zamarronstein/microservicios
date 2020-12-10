@@ -16,15 +16,16 @@ class Users {
             return p.id === id
         });
 
-        return (person.length > 0)? person[0] : null;
+        return (person.length > 0) ? person[0] : null;
     }
 
     getPeople() {
         return this.people;
     }
 
-    getPeoplePerRoom() {
-        // No implemented yet!
+    getPeoplePerRoom(room) {
+
+        return this.people.filter((person) => person.room == room);
     }
 
     deletePerson(id) {
