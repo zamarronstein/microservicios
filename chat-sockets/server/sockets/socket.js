@@ -21,17 +21,21 @@ io.on('connection', (client) => {
             room: user.room
         });
 
+        client.join(user.room);
+
         client.broadcast.to(user.room).emit('updateUsersList', users.getPeople());
 
         return callback({
             ok: true,
-            connectedUsers: users.getPeoplePerRoom(user.room);
+            connectedUsers: users.getPeoplePerRoom(user.room)
         });
     });
 
     client.on('messages', (_message) => {
 
         let person = users.getPerson(client.id);
+
+        console.log('messages: ', person);
 
         client.broadcast.to(person.room).emit('messages', message(person.name, _message));
     });

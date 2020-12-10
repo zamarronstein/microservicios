@@ -30,15 +30,19 @@ class Users {
 
     deletePerson(id) {
         let deletedPerson = this.getPerson(id);
-        console.log('deleted person: ', deletedPerson);
 
-        this.people = this.people.filter((p) => {
-            return p.id !== id
-        });
+        if (deletedPerson) {
+            console.log('deleted person: ', deletedPerson);
 
-        console.log('people: ', this.people);
+            this.people = this.people.filter((p) => {
+                return p.id !== id
+            });
 
-        return deletedPerson;
+            console.log('people: ', this.people);
+
+            return deletedPerson;
+
+        }
     }
 }
 
